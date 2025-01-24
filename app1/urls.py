@@ -1,7 +1,10 @@
 from django.urls import path,include
+from . import views
+
 from .views import *
 urlpatterns = [
-    path('',first,name='first'),
+    path('', views.add_product, name='add_product'),
+
     path('sec/',second,name='second'),
     path('login/',login,name='login'),
     path('logout/',logout,name='logout'),

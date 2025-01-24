@@ -2,8 +2,22 @@ from django.shortcuts import render,HttpResponse,redirect
 from .models import UserRegister,Category,Product,order,cart
 
 import razorpay
-def first(request):
-    return HttpResponse("This is my first web page!")   
+def add_product(request):
+    categories =Category.objects.all()
+
+    if request.method == 'POST':
+        data=Product()
+        data.name=request.POST['productName']
+        data.description=request.POST['description']
+        data.price=request.POST['price']
+        data.Category=Category.objects.get(id=request.POST['category'])
+        data.STOCK=request.POST['stock']
+        data.image=request.FILES['productImage']
+        data.save()
+        return render(request,'save_product.html')
+    else:
+        return render(request,'add_product.html',{'categories':categories})  
+
 
 # Create your views here.
 from django.core.mail import send_mail
@@ -42,7 +56,7 @@ def login(request):
     if request.method == 'POST':
         try:
             useremail = UserRegister.objects.get(email = request.POST['email'])
-            if useremail.password == request.POST['password']:
+            if useremail.password.strip() == request.POST['password'].strip():
                 request.session['s_email'] = useremail.email
                 otp =random.randint(100000,999999)
                 request.session['otp']=otp
@@ -54,13 +68,14 @@ def login(request):
                     fail_silently=False 
                 )
                 return redirect('otp')
-                # return redirect('second')
             else:
                 return render(request,'login.html', {'password': 'Incorrect password!'})
+
         except:
             return render(request,'login.html', {'email': 'Email does not exist!'})    
     else:
         return render(request, 'login.html')
+    
     
 def logout(request):
     del request.session['s_email']
@@ -173,7 +188,7 @@ def otp(request):
             return render(request,'otp.html',{'invalid':"the otp you enter does not match"})
     else:
         return render(request,'otp.html')
-
+        
 def cartdata(request):
     if 's_email' in request.session:
         prolist=[]

@@ -11,7 +11,7 @@ class UserRegister(models.Model):
     
     def __str__(self):
         return self.name
-
+    
 class Category(models.Model):
     catname = models.CharField(max_length=80)
     image = models.ImageField(upload_to='catimg')
