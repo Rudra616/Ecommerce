@@ -14,5 +14,6 @@ urlpatterns = [
     path('profile/',profile,name='profile'),
     path('checkout',checkout,name='checkout'),
     path('otp',otp,name='otp'),
-    path('cartdata',cartdata,name='cartdata')
+    path('cartdata',cartdata,name='cartdata'),
+    path('remove_item/<int:id>/',remove_item,name='remove_item')
 ]
