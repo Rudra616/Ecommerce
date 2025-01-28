@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="alert alert-success text-center">
+            <h1>Thank you for your order!</h1>
+            <p>Your order has been placed successfully.</p>
+        </div>
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4>Order Details</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ data.first_name }} {{ data.last_name }}</p>
+                <p><strong>Email:</strong> {{ data.email }}</p>
+                <p><strong>Address:</strong> {{ data.address }}, {{ data.state }}, {{ data.country }}</p>
+                <p><strong>Pin Code:</strong> {{ data.pincode }}</p>
+                <p><strong>Payment Method:</strong> Cash on Delivery</p>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-primary">Go Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

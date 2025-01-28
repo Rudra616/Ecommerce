@@ -111,5 +111,9 @@
     </footer>
   </body>
 </html>
-
+{% if out %}
+<script>
+    alert('{{out}}')
+</script>
+{% endif %}
 {% endblock content %}
