@@ -106,14 +106,16 @@ def products(request,id):
         logindetails=UserRegister.objects.get(email= request.session['s_email'])
         prodata=Product.objects.get(id=id)
         if 'buy' in request.POST:
-            if prodata.STOCK <= 0:
-                return render(request,'details.html',{"session":True})
+            if prodata.STOCK <= 0 or int(request.POST['qty']) > int(prodata.STOCK) :
+                return render(request,'details.html',{"session":True,'out':'out of stocks','pro':prodata})                              
+                # else:})
             else:
-                if int(request.POST['qty']) > int(prodata.STOCK):
-                    return render(request,'details.html',{"session":True})
-                else:
-                    request.session['proid']=prodata.pk
-                    request.session['buyqty']=request.POST['qty']
+                # if int(request.POST['qty']) > int(prodata.STOCK):
+                #     return render(request,'details.html',{"session":True,'out':'out of stocks'})                              
+                # else:
+                    request.session['proid'] = prodata.pk
+                    request.session['buyqty'] = request.POST['qty']
+                    
                     return redirect('checkout')
         elif 'cart' in request.POST:
        
@@ -147,7 +149,7 @@ def profile(request):
             user.mob = request.POST['mob']
             user.password = request.POST['password']
             user.save()
-            return render(request, 'profile.html', {'user':user})
+            return render(request, 'index.html', {'user':user})
         else:
             return render(request, 'profile.html', {'user':user})
     else:
@@ -163,7 +165,6 @@ def checkout(request):
             ordata=order()
             ordata.productid=pro.id
             ordata.userid=userRegister.pk
-            
             ordata.add=request.POST['addres']
             ordata.city=request.POST['country']
             ordata.state=request.POST['state']
@@ -196,11 +197,25 @@ def cartdata(request):
         catpro=cart.objects.filter(userid=userR.id)
         for i in catpro:
             pro = Product.objects.get(id=i.productid)
-            prodict ={'proimg':pro.image
+            prodict = {'proimg':pro.image
                       ,'proname':pro.name
                       ,'proprice':pro.price
                       ,'totalprice':i.totalprice
-                      ,'qty':i.qty}
+                      ,'qty':i.qty,
+                        'id': pro.id,  
+                    }
             prolist.append(prodict)
         return render(request,'cart.html',{'userR':True,'prolist':prolist})
     return render(request,"login.html")
+    
+
+
+def remove_item(request,id):
+    try:
+        the_id = request.session['cart_id']
+        Cart = cart.objects.get(id= the_id)
+    except:
+        return render(request,'cart.html')
+    cartitem = cart.objects.get(id=id)
+    cartitem.delete()
+
