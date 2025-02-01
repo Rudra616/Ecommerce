@@ -113,12 +113,12 @@
                 <ul class="list-group mb-3">
                     <li class="list-group-item d-flex justify-content-between">
                         <div>
-                            <img src="{{pro.image.url}}" width="200cm">
+                            <img src="{{product.image.url}}" width="200cm">
                         </div>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         <div>
-                            <h6 class="my-0">{{pro.name}}</h6>
+                            <h6 class="my-0">{{product.name}}</h6>
                           
                         </div>
                       
@@ -126,7 +126,7 @@
                     <li class="list-group-item d-flex justify-content-between">
                         <div>
                             <h6 class="my-0">description</h6>
-                            <small class="text-muted">{{pro.description}}</small>
+                            <small class="text-muted">{{product.description}}</small>
                         </div>
                         
                     </li>
@@ -134,7 +134,7 @@
                         <div>
                             <h6 class="my-0">Price:</h6>
                         </div>
-                        <span class="text-muted">{{pro.price}}</span>
+                        <span class="text-muted">{{product.price}}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         <div>
@@ -170,27 +170,27 @@
             var country = document.getElementById("country").value;
             var stateSelect = document.getElementById("state");
             var statesDiv = document.getElementById("states");
-    
+        
             // Clear previous states
             stateSelect.innerHTML = "";
-    
+        
             if (country === "") {
                 statesDiv.style.display = "none";
                 return;
             }
-    
+        
             // Define states for each country
             var countryStates = {
                 "USA": ["California", "Texas", "New York", "Florida", "Illinois"],
                 "Canada": ["Ontario", "Quebec", "British Columbia", "Alberta", "Manitoba"],
                 "Australia": ["New South Wales", "Victoria", "Queensland", "Western Australia", "South Australia"],
-                "india":  ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", 
-                                "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", 
-                                "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", 
-                                "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", 
-                                 "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"]
+                "india": ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", 
+                          "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", 
+                          "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", 
+                          "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", 
+                          "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"]
             };
-    
+        
             // Populate states based on selected country
             countryStates[country].forEach(function(state) {
                 var newOption = document.createElement("option");
@@ -198,10 +198,11 @@
                 newOption.textContent = state;
                 stateSelect.appendChild(newOption);
             });
-    
+        
             // Show the states select box
             statesDiv.style.display = "block";
         }
+        
     </script>
     {% if data %}
     <script>
