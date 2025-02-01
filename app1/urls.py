@@ -15,5 +15,6 @@ urlpatterns = [
     path('checkout',checkout,name='checkout'),
     path('otp',otp,name='otp'),
     path('cartdata',cartdata,name='cartdata'),
-    path('remove_item/<int:id>/',remove_item,name='remove_item')
+    path('remove_item/<int:id>/',remove_item,name='remove_item'),
+    path('order_history',order_history,name='order_history')
 ]
