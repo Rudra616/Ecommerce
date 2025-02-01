@@ -17,14 +17,26 @@ class category_(admin.ModelAdmin):
 admin.site.register(Category, category_)
 
 
-class allproduct_(admin.ModelAdmin):
-    list_display = ['name','description','image','STOCK','price','Category']
-admin.site.register(Product,allproduct_)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'product', 'qty', 'totalprice', 'status', 'datetime','state')
+    list_filter = ('status', 'datetime')
+    search_fields = ('user__name', 'product__name')
+    actions = ['mark_as_completed', 'mark_as_cancelled']
 
-class order_(admin.ModelAdmin):
-    list_display = ['userid','productid','add','city','state','pincode','qty','totalprice','transactionid','paytype','datetime']
-admin.site.register(order,order_)
+    def mark_as_completed(self, request, queryset):
+        queryset.update(status='Completed')
+    mark_as_completed.short_description = "Mark selected orders as Completed"
+
+    def mark_as_cancelled(self, request, queryset):
+        queryset.update(status='Cancelled')
+    mark_as_cancelled.short_description = "Mark selected orders as Cancelled"
+admin.site.register(order,OrderAdmin)
+
 
 class cart_(admin.ModelAdmin):
     list_display=['userid','productid','qty','totalprice','orderid']
 admin.site.register(cart,cart_)
+
+class product_(admin.ModelAdmin):
+    list_display=['name','description','image','price','STOCK','Category']
+admin.site.register(Product,product_)
