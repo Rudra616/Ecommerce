@@ -4,4 +4,8 @@ __pycache__/
 
 # Ignore SQLite database
 db.sqlite3
-*.sqlite3     
+*.sqlite3
+
+# Ignore static and media files
+static/
+media/
