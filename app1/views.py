@@ -157,29 +157,32 @@ def profile(request):
     
 def checkout(request):
     if 's_email' in request.session:
-        userRegister=UserRegister.objects.get(email = request.session['s_email'])
-        pro=Product.objects.get(id=request.session['proid'])
-        Qty=request.session['buyqty']
-        total= int(pro.price) * int(Qty)
-        if request.method=='POST':
-            ordata=order()
-            ordata.productid=pro.id
-            ordata.userid=userRegister.pk
-            ordata.add=request.POST['addres']
-            ordata.city=request.POST['country']
-            ordata.state=request.POST['state']
-            ordata.pincode=request.POST['pincode']
-            ordata.totalprice=total
-            ordata.qty=Qty
-            ordata.paytype=request.POST['option']
-            ordata.transactionid="1"
-            # clint=razorpay.Client(auth=())
-            ordata.save()
-            return render(request,"confrom.html",{'conform':'confrom your order'})
-        else:
-            return render(request,"checkout.html",{'session':True,'user':userRegister,'pro':pro,'Qty':Qty,'total':total})  
+        user = UserRegister.objects.get(email=request.session['s_email'])  # ✅ Get user object
+        product = Product.objects.get(id=request.session['proid'])  # ✅ Get product object
+        qty = int(request.session['buyqty'])
+        total = int(product.price) * qty
+
+        if request.method == 'POST':
+            order_data = order()  # Ensure this is capitalized to match model name
+            order_data.user = user  # ✅ Correct (assign object, not string)
+            order_data.product = product  # ✅ Correct (assign object, not string)
+            order_data.add = request.POST['addres']
+            order_data.city = request.POST['country']
+            order_data.state = request.POST.get('state', '')  # Fixed the syntax here
+            order_data.pincode = request.POST['pincode']
+            order_data.qty = qty
+            order_data.totalprice = total
+            order_data.paytype = request.POST['option']
+            order_data.transactionid = "1"
+            order_data.status = "Pending"  # ✅ Correct (status is a string)
+
+            order_data.save()
+            return render(request, "confrom.html", {'confirm': 'Your order has been placed successfully!'})
+
+        return render(request, "checkout.html", {'session': True, 'user': user, 'product': product, 'qty': qty, 'total': total})
     else:
         return redirect('login')
+
 
 def otp(request):
     if request.method == 'POST':
@@ -219,3 +222,10 @@ def remove_item(request,id):
     cartitem = cart.objects.get(id=id)
     cartitem.delete()
 
+def order_history(request):
+    if 's_email' in request.session:
+        user = UserRegister.objects.get(email=request.session['s_email'])
+        orders = order.objects.filter(user=user).order_by('-datetime')
+        return render(request, 'order_histroy.html', {'orders': orders})
+    else:
+        return redirect('login')
