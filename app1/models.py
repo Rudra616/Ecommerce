@@ -28,20 +28,28 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-class order(models.Model):
-    userid = models.CharField(max_length=100)
-    productid = models.CharField(max_length=100)
-    add = models.TextField()
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=20)
-    pincode = models.CharField(max_length=6)
-    qty = models.CharField(max_length=6)
-    totalprice = models.CharField(max_length=50)
-    paytype = models.CharField(max_length=20 ,default='cash')
-    transactionid = models.CharField(max_length=50)
-    datetime = models.DateTimeField(auto_now=True)
+class order(models.Model):  # ✅ Capitalized "Order" for consistency
+    user = models.ForeignKey(UserRegister, on_delete=models.CASCADE)  # ✅ Remove default='Pending'
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)  # ✅ Remove default='Pending'
+    
+    add = models.TextField(default='Pending')
+    status = models.CharField(
+        max_length=10, 
+        choices=[('Pending', 'Pending'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')], 
+        default='Pending'
+    )
+    city = models.CharField(max_length=50, default='Pending')
+    state = models.CharField(max_length=20, default='Pending')
+    pincode = models.CharField(max_length=6, default='Pending')
+    qty = models.CharField(max_length=6, default='Pending')
+    totalprice = models.CharField(max_length=50, default='Pending')
+    paytype = models.CharField(max_length=20, default='cash')
+    transactionid = models.CharField(max_length=50, default='Pending')
+    datetime = models.DateTimeField(auto_now_add=True,auto_now=False)
+    order_complited = models.DateTimeField(auto_now_add=False,auto_now=True)
     def __str__(self):
-        return self.userid
+        return f"Order {self.id} - {self.user.name if self.user else 'Unknown'}"    
+
     
 class cart(models.Model):
     userid = models.CharField(max_length=100)
