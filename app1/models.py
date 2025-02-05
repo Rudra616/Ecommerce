@@ -45,8 +45,8 @@ class order(models.Model):  # ✅ Capitalized "Order" for consistency
     totalprice = models.CharField(max_length=50, default='Pending')
     paytype = models.CharField(max_length=20, default='cash')
     transactionid = models.CharField(max_length=50, default='Pending')
-    datetime = models.DateTimeField(auto_now_add=True,auto_now=False)
-    order_complited = models.DateTimeField(auto_now_add=False,auto_now=True)
+    order_placed = models.DateTimeField(auto_now_add=True,auto_now=False)
+    order_complited = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return f"Order {self.id} - {self.user.name if self.user else 'Unknown'}"    
 

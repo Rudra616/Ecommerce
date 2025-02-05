@@ -1,7 +1,6 @@
 from django.shortcuts import render,HttpResponse,redirect
 from .models import UserRegister,Category,Product,order,cart
 
-import razorpay
 def add_product(request):
     categories =Category.objects.all()
 
@@ -100,43 +99,72 @@ def catpro(request,id):
         #     return render(request,'login.html',{'pro1':prodata})
         # except:
         #     return render(request,'login.html', {'email': 'Email does not exist!'})    
-    
-def products(request,id):
+def products(request, id):
     if 's_email' in request.session:
-        logindetails=UserRegister.objects.get(email= request.session['s_email'])
-        prodata=Product.objects.get(id=id)
+        logindetails = UserRegister.objects.get(email=request.session['s_email'])
+        prodata = Product.objects.get(id=id)
+
         if 'buy' in request.POST:
-            if prodata.STOCK <= 0 or int(request.POST['qty']) > int(prodata.STOCK) :
-                return render(request,'details.html',{"session":True,'out':'out of stocks','pro':prodata})                              
-                # else:})
+            requested_qty = int(request.POST['qty'])
+            available_stock = int(prodata.STOCK)
+
+            # Check stock availability
+            if available_stock <= 0 or requested_qty > available_stock:
+                return render(request, 'details.html', {
+                    "session": True, 
+                    'out': 'Out of stock', 
+                    'pro': prodata
+                })                              
             else:
-                # if int(request.POST['qty']) > int(prodata.STOCK):
-                #     return render(request,'details.html',{"session":True,'out':'out of stocks'})                              
-                # else:
-                    request.session['proid'] = prodata.pk
-                    request.session['buyqty'] = request.POST['qty']
-                    
-                    return redirect('checkout')
+                # Store product and quantity in session for checkout
+                request.session['proid'] = prodata.pk
+                request.session['buyqty'] = requested_qty
+
+                # Deduct stock after purchase
+                prodata.STOCK -= requested_qty
+                prodata.save()
+
+                return redirect('checkout')
+
         elif 'cart' in request.POST:
-       
-            cartdata=cart()
-            cartdata.productid=prodata.pk
-            cartdata.userid=logindetails.pk
-            cartdata.qty=request.POST['qty']
-            cartdata.totalprice=int(prodata.price) * int(request.POST['qty'])
-            already_cart = cart.objects.filter(productid=id,userid=logindetails.id)
-            if already_cart:
-                return render(request,'index.html',{'pro':prodata,'session':True ,'already':'already in cart'})
-            else:
-                cartdata.save()
-                return render(request,'index.html',{'pro':prodata,'session':True ,'store':'store in cart'})
+            requested_qty = int(request.POST['qty'])
+
+            # Check if requested quantity is available in stock
+            if requested_qty > prodata.STOCK:
+                return render(request, 'details.html', {
+                    "session": True, 
+                    'out': 'Not enough stock available', 
+                    'pro': prodata
+                })
+
+            # Check if the product is already in the cart
+            already_cart = cart.objects.filter(productid=id, userid=logindetails.id)
+            if already_cart.exists():
+                return render(request, 'index.html', {
+                    'pro': prodata, 
+                    'session': True, 
+                    'already': 'Already in cart'
+                })
+
+            # Add to cart
+            cartdata = cart()
+            cartdata.productid = prodata.pk
+            cartdata.userid = logindetails.pk
+            cartdata.qty = requested_qty
+            cartdata.totalprice = int(prodata.price) * requested_qty
+            cartdata.save()
+
+            return render(request, 'index.html', {
+                'pro': prodata, 
+                'session': True, 
+                'store': 'Stored in cart'
+            })
 
         else:
-            return render(request,'details.html',{'pro':prodata,'session':True})
+            return render(request, 'details.html', {'pro': prodata, 'session': True})
+
     else:
         return redirect('login')
-        # prodata=Product.objects.get(id=id)
-        # return render(request,'details.html',{'pro':prodata})
  
 
 def profile(request):
@@ -225,7 +253,16 @@ def remove_item(request,id):
 def order_history(request):
     if 's_email' in request.session:
         user = UserRegister.objects.get(email=request.session['s_email'])
-        orders = order.objects.filter(user=user).order_by('-datetime')
+        orders = order.objects.filter(user=user).order_by('-order_placed')
         return render(request, 'order_histroy.html', {'orders': orders})
     else:
         return redirect('login')
+
+def product_search(request):
+    query = request.GET.get('q')  # Get search query from URL
+    if query:
+        products = Product.objects.filter(name__icontains=query)  # Filter products by name
+    else:
+        products = Product.objects.all()  # Show all products if no search
+
+    return render(request, 'search_results.html', {'products': products, 'query': query})

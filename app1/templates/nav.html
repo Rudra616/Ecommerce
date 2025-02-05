@@ -3,99 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Responsive Navbar with Live Search</title>
     <link
-    rel="stylesheet"
-    45
-    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  {% comment %} <link rel="stylesheet" href={% static "css/ecom.css" %} /> {% endcomment %}
-    
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        /* Styling for the search result dropdown */
+        .search-results {
+            position: absolute;
+            background: white;
+            width: 100%;
+            border: 1px solid #ddd;
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        .search-results a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+        .search-results a:hover {
+            background: #f8f9fa;
+        }
+    </style>
 </head>
 <body>
     <header class="container-fluid navbar-light bg-light">
         <nav class="navbar container navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="index.html">Navbar</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-  
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                <a class="nav-link" href={% url "second"%}>Home</a>
-              </li>
-            
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              {% if session %}
-              <li class="nav-item">
-                <a class="nav-link" href={% url "logout" %}>
-                 Logout</i>
-                </a>
-              </li>
-              {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href={% url "login" %}>
-                  Login</i>
-                </a>
-              </li>
-              {% endif %}
-              <li class="nav-item">
-                <a class="nav-link" href={% url 'order_history' %}>Order History</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href={% url "add_product" %}>
-                  <i class="fa-solid fa-plus-square text-dark" aria-hidden="true">
-                    Add product</i>
-                </a>
-              </li>
-              <li class="nav-item">
-                <input
-                  class="input-group-text"
-                  type="text"
-                  placeholder="Search"
-                />
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href={% url "cartdata" %} 
-                  ><i class="fa fa-cart-shopping text-dark" aria-hidden="true"></i
-                ></a>
-              </li>
-           
-              <li class="nav-item">
-                <a class="nav-link" href={% url "profile" %}>
+            <a class="navbar-brand font-weight-bold" href="index.html">
+                <i class="fa-solid fa-store text-primary"></i> MyShop
+            </a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                  <i class="far fa-user text-dark" aria-hidden="true"></i
-                ></a>
-              </li>
-           +
-            
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href={% url "second" %}>Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={% url "order_history" %}>Orders</a>
+                    </li>
 
-           
-            </ul>
-          </div>
+                    {% if session %}
+                    <li class="nav-item">
+                        <a class="nav-link text-danger font-weight-bold" href={% url "logout" %}>Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-success font-weight-bold" href={% url "login" %}>Login</a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href={% url "add_product" %}>
+                            <i class="fa-solid fa-plus-square text-dark"></i> Add Product
+                        </a>
+                    </li>
+
+                    <!-- Search Box -->
+                    <li class="nav-item mx-3 d-flex align-items-center position-relative">
+                        <form class="form-inline w-100" action="{% url 'product_search' %}" method="GET">
+                            <div class="input-group">
+                                <input
+                                    class="form-control"
+                                    name="q"  
+                                    type="text"
+                                    placeholder="Search products..."
+                                    aria-label="Search"
+                                    required
+                                />
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href={% url "cartdata" %}>
+                            <i class="fa fa-shopping-cart text-dark"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href={% url "profile" %}>
+                            <i class="far fa-user text-dark"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </nav>
-      </header>
+    </header>
+
+    {% block content %}
+    {% endblock content %}
+
+  
 </body>
 </html>
-{% block content %}
-{% endblock content %}
+
