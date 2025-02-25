@@ -1,21 +1,61 @@
 from django.shortcuts import render,HttpResponse,redirect
 from .models import UserRegister,Category,Product,order,cart
 
-def add_product(request):
-    categories =Category.objects.all()
+from django.shortcuts import render, redirect
+from .models import Product, Category
+from django.contrib import messages
 
-    if request.method == 'POST':
-        data=Product()
-        data.name=request.POST['productName']
-        data.description=request.POST['description']
-        data.price=request.POST['price']
-        data.Category=Category.objects.get(id=request.POST['category'])
-        data.STOCK=request.POST['stock']
-        data.image=request.FILES['productImage']
-        data.save()
-        return render(request,'save_product.html')
+from django.urls import reverse
+from paypal.standard.forms import PayPalPaymentsForm
+from paypal.standard.models import ST_PP_COMPLETED
+from paypal.standard.ipn.signals import valid_ipn_received
+from django.dispatch import receiver
+from django.conf import settings
+import uuid
+
+@receiver(valid_ipn_received)
+def paypal_payment_notification(sender, **kwargs):
+    ipn = sender
+    if ipn.payment_status == ST_PP_COMPLETED:
+        try:
+            order_obj = order.objects.get(transactionid=ipn.invoice)
+            order_obj.status = "Completed"
+            order_obj.save()
+        except order.DoesNotExist:
+            return HttpResponse("Order not found", status=404)
+
+    return HttpResponse("OK", status=200)
+
+
+def add_product(request):
+    if 's_email' in request.session:
+     
+        if request.method == "POST":
+            name = request.POST["productName"]
+            description = request.POST["description"]
+            price = request.POST["price"]
+            category_id = request.POST["category"]
+            stock = request.POST["stock"]
+            image = request.FILES["productImage"]
+
+            category = Category.objects.get(id=category_id)
+
+            product = Product.objects.create(
+                name=name, 
+                description=description,
+                price=price,
+                Category=category,
+                STOCK=stock, 
+                image=image,
+                is_approved=False
+            )
+            messages.success(request, "Your product request has been sent for approval.")
+            return redirect("add_product")
+
+        categories = Category.objects.all()
+        return render(request, "add_product.html", {"categories": categories})
     else:
-        return render(request,'add_product.html',{'categories':categories})  
+        return redirect('login')
 
 
 # Create your views here.
@@ -182,34 +222,83 @@ def profile(request):
             return render(request, 'profile.html', {'user':user})
     else:
         return redirect('login')
+
+import json
+from django.shortcuts import get_object_or_404
+
+def payment_success(request):
+    order_id = request.session.get('order_id')
+    if order_id:
+        order_data = get_object_or_404(order, id=order_id)
+        order_data.status = "Completed"  # Mark as completed
+        order_data.save()  # Save order status
+        del request.session['order_id']  # Remove session key
     
+    return render(request, "payment_success.html", {})
+
+def payment_failed(request):
+    return render(request, "payment_failed.html", {})
+
 def checkout(request):
     if 's_email' in request.session:
-        user = UserRegister.objects.get(email=request.session['s_email'])  # ✅ Get user object
-        product = Product.objects.get(id=request.session['proid'])  # ✅ Get product object
+        user = UserRegister.objects.get(email=request.session['s_email'])
+        product = Product.objects.get(id=request.session['proid'])
         qty = int(request.session['buyqty'])
         total = int(product.price) * qty
+        
+
+        notify_url = request.build_absolute_uri(reverse('paypal-ipn'))
+        return_url = request.build_absolute_uri(reverse('payment_success'))
+        cancel_url = request.build_absolute_uri(reverse('payment_failed'))
+
+        paypal_dict = {
+            'business': 'busness@ggmail.com',
+            'amount': str(total),
+            'item_name': product.name,
+            'invoice': str(uuid.uuid4()),
+            "notify_url": notify_url,
+            "return_url": return_url,
+            "cancel_url": cancel_url,   'cmd': '_xclick',
+            'currency_code': 'USD',  # Force USD to avoid issues
+            'no_shipping': '1',
+            'no_note': '1',
+            'bn': 'PP-BuyNowBF',
+            'custom': user.id,
+}
+        print("AA")
+        print("PayPal Data JSON:", json.dumps(paypal_dict, indent=4))
 
         if request.method == 'POST':
-            order_data = order()  # Ensure this is capitalized to match model name
-            order_data.user = user  # ✅ Correct (assign object, not string)
-            order_data.product = product  # ✅ Correct (assign object, not string)
+            order_data = order()
+            order_data.user = user
+            order_data.product = product
             order_data.add = request.POST['addres']
             order_data.city = request.POST['country']
-            order_data.state = request.POST.get('state', '')  # Fixed the syntax here
+            order_data.state = request.POST.get('state', '')
             order_data.pincode = request.POST['pincode']
             order_data.qty = qty
             order_data.totalprice = total
             order_data.paytype = request.POST['option']
-            order_data.transactionid = "1"
-            order_data.status = "Pending"  # ✅ Correct (status is a string)
 
-            order_data.save()
-            return render(request, "confrom.html", {'confirm': 'Your order has been placed successfully!'})
+            if request.POST['option'] == 'online':
+                order_data.transactionid = str(uuid.uuid4())
+                order_data.status = "Pending Payment"
+                order_data.save()  # Save before redirecting to PayPal
+    
+                request.session['order_id'] = order_data.id  # Store order ID in session
+ 
+                return render(request, "paypal_redirect.html", {'paypal_dict': paypal_dict})
+            else:
+                order_data.transactionid = "1"
+                order_data.status = "Pending"
+                order_data.save()
+                return render(request, "confrom.html", {'confirm': 'Your order has been placed successfully!'})
 
         return render(request, "checkout.html", {'session': True, 'user': user, 'product': product, 'qty': qty, 'total': total})
     else:
         return redirect('login')
+
+
 
 
 def otp(request):
@@ -259,10 +348,22 @@ def order_history(request):
         return redirect('login')
 
 def product_search(request):
-    query = request.GET.get('q')  # Get search query from URL
-    if query:
-        products = Product.objects.filter(name__icontains=query)  # Filter products by name
+    if request.method == "POST":
+        searched = request.POST.get('searched')
+        # searched = request.POST.get('searched', '') 
+        return render(request,'search_results.html',{'searched':searched})  
     else:
-        products = Product.objects.all()  # Show all products if no search
+        return render(request,'search_results.html')  
 
-    return render(request, 'search_results.html', {'products': products, 'query': query})
+    # query = request.GET.get('q')  # Get search query from URL
+    # if query:
+    #     products = Product.objects.filter(name__icontains=query)  # Filter products by name
+    # else:
+    #     products = Product.objects.all()  # Show all products if no search
+
+    # return render(request, 'search_results.html', {'products': products, 'query': query})
+
+
+def product_list(request):
+    products = Product.objects.filter(is_approved=True)  # Show only approved products
+    return render(request, "product_list.html", {"products": products})

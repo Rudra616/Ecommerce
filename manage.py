@@ -1,4 +1,4 @@
-#user  password:rudra,,name :RUDRA
+#user  password:rudra,,name :rudra
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os

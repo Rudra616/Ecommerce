@@ -3,8 +3,8 @@ from . import views
 
 from .views import *
 urlpatterns = [
-    path('', views.add_product, name='add_product'),
-    path('sec/',second,name='second'),
+    path('add_product', views.add_product, name='add_product'),
+    path('',second,name='second'),
     path('login/',login,name='login'),
     path('logout/',logout,name='logout'),
     path('reg/',reg,name="reg"),
@@ -17,5 +17,8 @@ urlpatterns = [
     path('remove_item/<int:id>/',remove_item,name='remove_item'),
     path('order_history',order_history,name='order_history'),
     path('search/', product_search, name='product_search'),
-
+    path('product_list/', product_list, name='product_list'),
+    path('paypal',include("paypal.standard.ipn.urls")),
+    path('payment_failed/', payment_failed, name='payment_failed'),
+    path('payment_success/', payment_success, name='payment_success'),
 ]

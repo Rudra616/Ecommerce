@@ -21,7 +21,7 @@ admin.site.register(Category, category_)
 
 class OrderAdmin(admin.ModelAdmin):
     # Display columns in the list view
-    list_display = ('user', 'product', 'order_placed', 'order_complited', 'status', 'totalprice')
+    list_display = ('user', 'product', 'order_placed', 'order_complited', 'status', 'totalprice','paytype')
 
     # Filter options for the list view
     list_filter = ('status',)
@@ -61,4 +61,11 @@ class product_(admin.ModelAdmin):
     list_display=['name','description','image','price','STOCK','Category']
     list_editable = ('STOCK',)  # Allows direct stock editing in the list view
     search_fields = ('name',)
+    list_filter = ("is_approved","Category")
+    actions = ["approve_products"]
+    
+    def approve_products(self,request,queryset):
+        queryset.update(is_approved=True)
+        self.message_user(request,"selected product have been approved")
+
 admin.site.register(Product,product_)

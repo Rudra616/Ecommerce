@@ -24,6 +24,8 @@ class Product(models.Model):
     price = models.CharField(max_length=100)
     STOCK = models.PositiveSmallIntegerField()
     Category = models.ForeignKey(Category,on_delete=models.CASCADE)
+    is_approved = models.BooleanField(default=False)  # Admin approval required
+
    
     def __str__(self):
         return self.name

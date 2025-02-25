@@ -25,13 +25,15 @@ SECRET_KEY = 'django-insecure-eselg5v-193m9hki+44e%noe17f6y-6yz0t!qy3j+*_d54hcl$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.8000', 'localhost']
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'paypal.standard.ipn',
+   
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -137,3 +139,11 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 ALLOWED_HOSTS = []
+
+PAYPAL_RECEIVER_EMAIL = "busness@ggmail.com"
+PAYPAL_TEST = True 
+
+
+
+# busness@ggmail.com
+# busness@123

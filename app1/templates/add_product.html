@@ -28,10 +28,10 @@
             <div class="form-group">
                 <label for="category">Category</label>
                 <select id="category" name="category" required>
-                    <option value="">select categopry</option>
+                    <option value="">Select category</option>
                     {% for category in categories %}
-                    <option value="{{category.id}}">{{category.catname}}
-                    {% endfor%}
+                    <option value="{{ category.id }}">{{ category.catname }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="form-group">
@@ -44,6 +44,9 @@
             </div>
             <button type="submit" class="btn">Add Product</button>
         </form>
+
+        <!-- Back to Home Button -->
+        <a href="{% url 'second' %}" class="back-btn">← Back to Home</a>
     </div>
 </body>
 </html>
