@@ -13,18 +13,6 @@ from django.dispatch import receiver
 from django.conf import settings
 import uuid
 
-@receiver(valid_ipn_received)
-def paypal_payment_notification(sender, **kwargs):
-    ipn = sender
-    if ipn.payment_status == ST_PP_COMPLETED:
-        try:
-            order_obj = order.objects.get(transactionid=ipn.invoice)
-            order_obj.status = "Completed"
-            order_obj.save()
-        except order.DoesNotExist:
-            return HttpResponse("Order not found", status=404)
-
-    return HttpResponse("OK", status=200)
 
 
 def add_product(request):
@@ -226,14 +214,57 @@ def profile(request):
 import json
 from django.shortcuts import get_object_or_404
 
+from django.shortcuts import render, get_object_or_404
+from django.core.mail import send_mail
+import uuid
+from .models import UserRegister, order
+
 def payment_success(request):
+    
+    user_email = request.session.get('s_email')
+    total_s=request.session['total_s']
+    if not user_email:
+        return HttpResponse("Email parameter missing", status=400)
+
+    print(f"Searching for user with email: {user_email}")
+    user = UserRegister.objects.get(email=user_email)
+
     order_id = request.session.get('order_id')
     if order_id:
         order_data = get_object_or_404(order, id=order_id)
+        order_date = order_data.order_placed  
+        ordernumber = uuid.uuid4().int 
+
+        print(ordernumber)
+        print(order_date)
+
+        send_mail(
+            'Success',
+            f'Dear {user.name},\n\n'
+            f'Thank you for placing an order with MYSHOP. We are pleased to confirm '
+            f'the receipt of your order {ordernumber}, dated {order_date}. '
+            f'Your order is now being processed and we will ensure its prompt dispatch.\n\n'
+            'Best regards,\n'
+            'MYSHOP Team',
+            'rudrampanchal@gmail.com',
+            [user_email],
+            fail_silently=False
+        )
+
+        # send_mail(
+        #     'payment success',
+        #     f'paypal{total_s}',
+        #     'MYSHOP Team',
+        #     'rudrampanchal@gmail.com',
+        #     [user_email],
+        #     fail_silently=False
+        # )
+        # print(total_s)
+
         order_data.status = "Completed"  # Mark as completed
         order_data.save()  # Save order status
         del request.session['order_id']  # Remove session key
-    
+
     return render(request, "payment_success.html", {})
 
 def payment_failed(request):
@@ -245,7 +276,7 @@ def checkout(request):
         product = Product.objects.get(id=request.session['proid'])
         qty = int(request.session['buyqty'])
         total = int(product.price) * qty
-        
+        request.session['total_s']=total
 
         notify_url = request.build_absolute_uri(reverse('paypal-ipn'))
         return_url = request.build_absolute_uri(reverse('payment_success'))
@@ -283,16 +314,38 @@ def checkout(request):
             if request.POST['option'] == 'online':
                 order_data.transactionid = str(uuid.uuid4())
                 order_data.status = "Pending Payment"
-                order_data.save()  # Save before redirecting to PayPal
+                order_data.save() 
     
-                request.session['order_id'] = order_data.id  # Store order ID in session
+                request.session['order_id'] = order_data.id 
  
                 return render(request, "paypal_redirect.html", {'paypal_dict': paypal_dict})
             else:
-                order_data.transactionid = "1"
+                order_data.transactionid = str(uuid.uuid4())
                 order_data.status = "Pending"
+            
+                user_email = request.session.get('s_email')
+
+                if not user_email:
+                    return HttpResponse("Email parameter missing", status=400)
+
+                print(f"Searching for user with email: {user_email}")
+                user = UserRegister.objects.get(email=user_email)
+
+                send_mail(
+                    'Success',
+                    f'Dear {user.name},\n\n'
+                    f'Thank you for placing an order with MYSHOP. We are pleased to confirm '
+                    f'the receipt of your order'
+                    f'Your order is now being processed and we will ensure its prompt dispatch.\n\n'
+                    'Best regards,\n'
+                    'MYSHOP Team',
+                    'rudrampanchal@gmail.com',
+                    [user_email],
+                    fail_silently=False
+                )
                 order_data.save()
-                return render(request, "confrom.html", {'confirm': 'Your order has been placed successfully!'})
+                return render(request, "confrom.html")
+            
 
         return render(request, "checkout.html", {'session': True, 'user': user, 'product': product, 'qty': qty, 'total': total})
     else:
