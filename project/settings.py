@@ -25,10 +25,16 @@ SECRET_KEY = 'django-insecure-eselg5v-193m9hki+44e%noe17f6y-6yz0t!qy3j+*_d54hcl$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",  # Localhost
-    "ecommerce-mcql.onrender.com",  # Your Render domain
-]
+import os
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ecommerce-mcql.onrender.com']
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")  # Debugging output
+print(f"Incoming HTTP_HOST: {os.getenv('HTTP_HOST')}")  # Debugging
 
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default

@@ -420,3 +420,8 @@ def product_search(request):
 def product_list(request):
     products = Product.objects.filter(is_approved=True)  # Show only approved products
     return render(request, "product_list.html", {"products": products})
+
+from django.http import JsonResponse
+
+def debug_request(request):
+    return JsonResponse(dict(request.META))

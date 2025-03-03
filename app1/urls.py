@@ -21,4 +21,6 @@ urlpatterns = [
     path('paypal',include("paypal.standard.ipn.urls")),
     path('payment_failed/', payment_failed, name='payment_failed'),
     path('payment_success/', payment_success, name='payment_success'),
+    path('debug/', debug_request, name='debug_request'),
+
 ]
