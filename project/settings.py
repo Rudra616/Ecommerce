@@ -45,6 +45,8 @@ import os
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
+print("🚀 ALLOWED_HOSTS:", ALLOWED_HOSTS)  # Debugging line
+
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default
 
