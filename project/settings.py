@@ -31,8 +31,10 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "ecommerce-mcql.onrender.com",
-    "ecommerce-pmq7.onrender.com",  # Add this line
+    "ecommerce-pmq7.onrender.com",  # ✅ Add this
+    ".onrender.com",  # ✅ Allow all subdomains on Render
 ]
+
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
