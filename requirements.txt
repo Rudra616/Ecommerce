@@ -3,7 +3,9 @@ certifi==2025.1.31
 charset-normalizer==3.4.1
 Django==5.1.6
 django-paypal==2.1
+gunicorn==23.0.0
 idna==3.10
+packaging==24.2
 pillow==11.1.0
 python-dotenv==1.0.1
 pytz==2025.1
