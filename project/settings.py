@@ -28,12 +28,14 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.8000', 'localhost']
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default
 
+import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 
 # Application definition
 
 INSTALLED_APPS = [
     'paypal.standard.ipn',
-    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
