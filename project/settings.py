@@ -33,8 +33,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default
 
 INSTALLED_APPS = [
     'paypal.standard.ipn',
-   
-    'jazzmin',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
