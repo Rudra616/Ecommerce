@@ -33,7 +33,7 @@ ALLOWED_HOSTS = [
 # ✅ Correct ALLOWED_HOSTS Handling
 import os
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost,ecommerce-2ubu.onrender.com").split(",")
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
