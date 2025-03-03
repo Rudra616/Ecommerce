@@ -24,8 +24,16 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'ecommerce-2ubu.onrender.com',  # Add your Render domain here
+]
+
 # ✅ Correct ALLOWED_HOSTS Handling
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost,ecommerce-mcql.onrender.com,ecommerce-pmq7.onrender.com,.onrender.com").split(",")
+import os
+
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
