@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-eselg5v-193m9hki+44e%noe17f6y-6yz0t!qy3j+*_d54hcl$
 DEBUG = True
 
 import os
+ALLOWED_HOSTS = ["ecommerce-ieoa.onrender.com", "127.0.0.1", "localhost"]
 
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
