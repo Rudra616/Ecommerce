@@ -24,11 +24,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'ecommerce-2ubu.onrender.com',  # Add your Render domain here
-]
+ALLOWED_HOSTS = ['*']
 
 # ✅ Correct ALLOWED_HOSTS Handling
 import os
@@ -133,3 +129,24 @@ PAYPAL_TEST = True
 
 # busness@ggmail.com
 # busness@123
+
+import os
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
