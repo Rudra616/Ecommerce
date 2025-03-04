@@ -78,15 +78,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-import dj_database_url
 import os
+import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f'sqlite:///{os.path.join(BASE_DIR, "db.sqlite3")}'
+        default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3')
     )
 }
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Password validation
