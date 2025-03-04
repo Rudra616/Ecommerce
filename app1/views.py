@@ -425,3 +425,13 @@ from django.http import JsonResponse
 
 def debug_request(request):
     return JsonResponse(dict(request.META))
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+
+def create_superuser(request):
+    User = get_user_model()
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@example.com", "admin123")
+        return HttpResponse("Superuser created successfully. Now remove this URL!")
+    else:
+        return HttpResponse("Superuser already exists.")

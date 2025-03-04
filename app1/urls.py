@@ -22,5 +22,6 @@ urlpatterns = [
     path('payment_failed/', payment_failed, name='payment_failed'),
     path('payment_success/', payment_success, name='payment_success'),
     path('debug/', debug_request, name='debug_request'),
+    path("create-superuser/", create_superuser),
 
 ]
