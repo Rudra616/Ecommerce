@@ -2,11 +2,11 @@ services:
   - name: ecommerce-app
     type: web
     runtime: python
-    region: oregon  # Change to your preferred region
-    plan: free  # Change to "starter" or "pro" if needed
+    region: oregon
+    plan: free
     envVars:
       - key: DATABASE_URL
-        sync: false  # Set "true" if using a managed PostgreSQL database
+        sync: false
       - key: SECRET_KEY
         sync: false
       - key: DEBUG
@@ -17,53 +17,8 @@ services:
         value: "https://ecommerce-1-f6c1.onrender.com"
     buildCommand: |
       pip install -r requirements.txt
-      python manage.py collectstatic --noinputservices:
-  - name: ecommerce-app
-    type: web
-    runtime: python
-    region: oregon  # Change to your preferred region
-    plan: free  # Change to "starter" or "pro" if needed
-    envVars:
-      - key: DATABASE_URL
-        sync: false  # Set "true" if using a managed PostgreSQL database
-      - key: SECRET_KEY
-        sync: false
-      - key: DEBUG
-        value: "False"
-      - key: ALLOWED_HOSTS
-        value: "ecommerce-1-f6c1.onrender.com,127.0.0.1,localhost"
-      - key: CSRF_TRUSTED_ORIGINS
-        value: "https://ecommerce-1-f6c1.onrender.com"
-    buildCommand: |
-      pip install -r requirements.txt  # Install dependencies
-      python manage.py collectstatic --noinput  # Collect static files for production
-      python manage.py makemigrations app1  # Apply migrations for your app
-      python manage.py migrate --noinput  # Apply all migrations
-    startCommand: gunicorn project.wsgi --bind 0.0.0.0:$PORT  # Start app with Gunicorn
-
+      python manage.py collectstatic --noinput
       python manage.py makemigrations app1
       python manage.py migrate --noinput
+    preDeployCommand: python manage.py migrate sessions # Ensure migrations run before deployment
     startCommand: gunicorn project.wsgi --bind 0.0.0.0:$PORT
-services:
-  - name: ecommerce-app
-    type: web
-    runtime: python
-    region: oregon  # Change to your preferred region
-    plan: free  # Change to "starter" or "pro" if needed
-    envVars:
-      - key: DATABASE_URL
-        sync: false  # Set "true" if using a managed PostgreSQL database
-      - key: SECRET_KEY
-        sync: false
-      - key: DEBUG
-        value: "False"
-      - key: ALLOWED_HOSTS
-        value: "ecommerce-1-f6c1.onrender.com,127.0.0.1,localhost"
-      - key: CSRF_TRUSTED_ORIGINS
-        value: "https://ecommerce-1-f6c1.onrender.com"
-    buildCommand: |
-      pip install -r requirements.txt  # Install dependencies
-      python manage.py collectstatic --noinput  # Collect static files for production
-      python manage.py makemigrations app1  # Apply migrations for your app
-      python manage.py migrate --noinput  # Apply all migrations
-    startCommand: gunicorn project.wsgi --bind 0.0.0.0:$PORT  # Start app with Gunicorn
