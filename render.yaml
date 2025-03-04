@@ -18,6 +18,6 @@ services:
     buildCommand: |
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
-      python manage.py makemigrations
-      python manage.py migrate
+      python manage.py makemigrations app1
+      python manage.py migrate --noinput
     startCommand: gunicorn project.wsgi --bind 0.0.0.0:$PORT
