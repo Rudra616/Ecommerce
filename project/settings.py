@@ -19,14 +19,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key")
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
+
 
 ALLOWED_HOSTS = "ecommerce-neo9.onrender.com,127.0.0.1,localhost"
 
 SECURE_SSL_REDIRECT = True
-CSRF_TRUSTED_ORIGINS = [
-    "https://ecommerce-neo9.onrender.com"
-]
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "https://ecommerce-neo9.onrender.com").split(",")
 
 
 # ✅ Correct ALLOWED_HOSTS - Remove the overwritten empty list
