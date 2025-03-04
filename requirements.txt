@@ -370,6 +370,7 @@ websocket-client @ file:///croot/websocket-client_1715878298792/work
 Werkzeug @ file:///croot/werkzeug_1716533313107/work
 whatthepatch @ file:///work/perseverance-python-buildout/croot/whatthepatch_1698866493803/work
 wheel==0.45.1
+whitenoise==6.9.0
 widgetsnbextension @ file:///croot/widgetsnbextension_1710960037596/work
 wrapt @ file:///work/perseverance-python-buildout/croot/wrapt_1698851040578/work
 wurlitzer @ file:///work/perseverance-python-buildout/croot/wurlitzer_1698906481008/work
