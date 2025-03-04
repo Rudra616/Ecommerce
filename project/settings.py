@@ -152,6 +152,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load .env file
 load_dotenv()
 
+ALLOWED_HOSTS = [
+    'ecommerce-neo9.onrender.com',
+    '127.0.0.1',
+    'localhost',
+]
+
+
 # Load ALLOWED_HOSTS correctly
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]  # Remove extra spaces
