@@ -23,6 +23,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SECURE_SSL_REDIRECT = True
+CSRF_TRUSTED_ORIGINS = [
+    "https://ecommerce-neo9.onrender.com"
+]
+
 
 # ✅ Correct ALLOWED_HOSTS - Remove the overwritten empty list
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "ecommerce-neo9.onrender.com,127.0.0.1,localhost").split(",")
@@ -79,6 +84,10 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 import os
 import dj_database_url
+
+import os
+PORT = os.getenv("PORT", "8000")
+
 
 DATABASES = {
     'default': dj_database_url.config(
