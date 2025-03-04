@@ -24,7 +24,8 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['ecommerce.onrender.com']
+ALLOWED_HOSTS = ['*']
+
 
 # ✅ Correct ALLOWED_HOSTS Handling
 import os
