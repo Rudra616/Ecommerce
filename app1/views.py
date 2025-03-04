@@ -435,3 +435,11 @@ def create_superuser(request):
         return HttpResponse("Superuser created successfully. Now remove this URL!")
     else:
         return HttpResponse("Superuser already exists.")
+from django.core.management import call_command
+
+def run_migrations(request):
+    try:
+        call_command("migrate")
+        return JsonResponse({"status": "success", "message": "Migrations applied!"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)})

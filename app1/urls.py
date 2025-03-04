@@ -23,5 +23,6 @@ urlpatterns = [
     path('payment_success/', payment_success, name='payment_success'),
     path('debug/', debug_request, name='debug_request'),
     path("create-superuser/", create_superuser),
+    path("run-migrations/", run_migrations),  # New route
 
 ]
