@@ -153,7 +153,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 ALLOWED_HOSTS = [
-    'ecommerce-neo9.onrender.com',
+    'ecommerce-1-neo9.onrender.com',
     '127.0.0.1',
     'localhost',
 ]
