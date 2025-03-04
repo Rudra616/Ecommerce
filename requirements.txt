@@ -9,6 +9,7 @@ cleo==2.1.0
 crashtest==0.4.1
 cryptography==44.0.2
 distlib==0.3.9
+dj-database-url==2.3.0
 Django==5.1.6
 django-paypal==2.1
 dulwich==0.22.8
@@ -35,7 +36,7 @@ pkginfo==1.12.1.2
 platformdirs==4.3.6
 poetry==2.1.1
 poetry-core==2.1.1
--e git+https://github.com/Rudra616/Ecommerce.git@8369b73ba7cc3cd311a03a24ee6a81f8e6577e58#egg=project
+-e git+https://github.com/Rudra616/Ecommerce.git@2e594bb38a1cabd89fd3bd91938fa2c9a31446b5#egg=project
 psycopg2-binary==2.9.10
 pycparser==2.22
 pyproject_hooks==1.2.0
