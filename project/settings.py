@@ -21,7 +21,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key")
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = "ecommerce-neo9.onrender.com,127.0.0.1,localhost"
 
 SECURE_SSL_REDIRECT = True
 CSRF_TRUSTED_ORIGINS = [
