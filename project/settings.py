@@ -21,20 +21,15 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-
-ALLOWED_HOSTS = "ecommerce-neo9.onrender.com,127.0.0.1,localhost"
-
-SECURE_SSL_REDIRECT = True
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "https://ecommerce-neo9.onrender.com").split(",")
-
-
-# ✅ Correct ALLOWED_HOSTS - Remove the overwritten empty list
+# ✅ Fix ALLOWED_HOSTS
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "ecommerce-neo9.onrender.com,127.0.0.1,localhost").split(",")
+
+# ✅ Fix CSRF_TRUSTED_ORIGINS
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "https://ecommerce-neo9.onrender.com").split(",")
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
 
 # Application definition
@@ -81,18 +76,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-import os
+
 import dj_database_url
-
-import os
-PORT = os.getenv("PORT", "8000")
-
-
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3')
     )
 }
+
 
 
 # Password validation
@@ -125,8 +116,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEBUG =True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER ='rudrampanchal@gmail.com'
-EMAIL_HOST_PASSWORD ='dgcn rxxe glzp stex'
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
@@ -140,26 +131,7 @@ PAYPAL_TEST = True
 # busness@ggmail.com
 # busness@123
 
-import os
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    },
-}
 
 
 
