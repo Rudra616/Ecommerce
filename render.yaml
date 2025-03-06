@@ -6,20 +6,28 @@ services:
       - key: DATABASE_URL
         value: "sqlite:////var/lib/sqlite/db.sqlite3"  # Persistent storage path
       - key: SECRET_KEY
-        value: "q50XorVvSm4ZBHkUtccsmwOTBImqXNBrrLOP8LGIo2OFrNauayZ9c5uJ8BJPcJi3fKw"
+        sync: false  # Keeps the secret key secure, manually set in Render's dashboard
       - key: DEBUG
-        value: "False"  # Change to True for local testing
+        value: "False"  # Change to "True" only for local testing
       - key: ALLOWED_HOSTS
         value: "ecommercee-lkck.onrender.com,127.0.0.1,localhost"
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: "admin"
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: "admin@example.com"
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false  # Set password manually in Render Dashboard
     disk:
       name: sqlite-data
       mountPath: /var/lib/sqlite  # Ensures database persistence
       sizeGB: 1  # Minimum size for persistence
     buildCommand: |
+      pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: |
-      python manage.py collectstatic --noinput && gunicorn project.wsgi:application --bind 0.0.0.0:8000
+      python manage.py migrate
+      python manage.py createsuperuser --noinput || true
+      gunicorn project.wsgi:application --bind 0.0.0.0:8000
     postDeployCommand: |
       python manage.py migrate --noinput  # Runs all pending migrations
       python manage.py collectstatic --noinput  # Collects static files for deployment
-    Session Key: 4M4EpXCYby7dgGlA1HdjXPLShbAxWe1j, Expiry: 2025-03-05 07:06:33.324145, Expired: False
