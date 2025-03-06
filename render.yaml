@@ -13,8 +13,6 @@ services:
         value: "ecommercee-lkck.onrender.com,127.0.0.1,localhost"
       - key: DJANGO_SUPERUSER_USERNAME
         value: "admin"
-      - key: DJANGO_SUPERUSER_EMAIL
-        value: "admin@example.com"
       - key: DJANGO_SUPERUSER_PASSWORD
         value: "admin0902"
          # Set password manually in Render Dashboard
@@ -27,7 +25,10 @@ services:
       pip install -r requirements.txt
     startCommand: |
       python manage.py migrate
-      python manage.py createsuperuser --noinput || true
+      echo "from django.contrib.auth import get_user_model; \
+      User = get_user_model(); \
+      User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists() or \
+      User.objects.create_superuser('$DJANGO_SUPERUSER_USERNAME','$DJANGO_SUPERUSER_PASSWORD')" | python manage.py shell
       gunicorn project.wsgi:application --bind 0.0.0.0:8000
     postDeployCommand: |
       python manage.py migrate --noinput  # Runs all pending migrations
