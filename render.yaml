@@ -10,7 +10,7 @@ services:
       - key: DEBUG
         value: "False"  # Change to "True" only for local testing
       - key: ALLOWED_HOSTS
-        value: "ecommercee-lkck.onrender.com,127.0.0.1,localhost"
+        value: "ecommercee-zymt.onrender.com,127.0.0.1,localhost"
       - key: DJANGO_SUPERUSER_USERNAME
         value: "admin"
       - key: DJANGO_SUPERUSER_PASSWORD
