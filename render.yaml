@@ -16,7 +16,8 @@ services:
       - key: DJANGO_SUPERUSER_EMAIL
         value: "admin@example.com"
       - key: DJANGO_SUPERUSER_PASSWORD
-        sync: false  # Set password manually in Render Dashboard
+        value: "admin0902"
+         # Set password manually in Render Dashboard
     disk:
       name: sqlite-data
       mountPath: /var/lib/sqlite  # Ensures database persistence
