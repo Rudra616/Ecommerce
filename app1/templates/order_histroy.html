@@ -1,0 +1,64 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        .back-home {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 position-relative">
+        <!-- Back to Home Button (Top-Right) -->
+        <a href="{% url 'second' %}" class="btn btn-outline-primary back-home">
+            <i class="bi bi-house-door"></i>
+        </a>
+
+        <h2 class="mb-4 text-center">Order History</h2>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product</th>
+                        <th>Placed Date</th>
+                        <th>Completed Date</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.product }}</td>
+                        <td>{{ order.order_placed|default:"-" }}</td>
+                        <td>{{ order.order_complited|default:"Pending" }}</td>
+                        <td>
+                            <span class="badge bg-{% if order.status == 'Completed' %}success{% elif order.status == 'Pending' %}warning{% else %}danger{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td>${{ order.totalprice }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+{% endblock content %}

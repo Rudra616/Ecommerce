@@ -1,0 +1,193 @@
+{% extends "nav.html" %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/ecom.css' %}">
+    
+    <style>
+        /* General Styles */
+        body {
+            background-color: #f8f9fa;
+        }
+
+        /* Carousel Section */
+        .carousel-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        /* Services Section */
+        .service-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-card i {
+            font-size: 40px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        /* Category Section */
+        .category-card {
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: 0.3s;
+        }
+
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .category-card .card-body {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Responsive Fix */
+        @media (max-width: 768px) {
+            .carousel-item img {
+                height: 300px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+    <!--====================== Carousel Section ======================-->
+    <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000">
+      <div class="carousel-inner">
+          <div class="carousel-item active">
+              <img src="{% static 'imgs/img1.webp' %}" class="d-block w-100" alt="First Slide">
+          </div>
+          <div class="carousel-item">
+              <img src="{% static 'imgs/img2.webp' %}" class="d-block w-100" alt="Second Slide">
+          </div>
+          <div class="carousel-item">
+              <img src="{% static 'imgs/img3.webp' %}" class="d-block w-100" alt="Third Slide">
+          </div>
+      </div>
+  
+      <!-- Previous Button -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+      </button>
+  
+      <!-- Next Button -->
+      <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+      </button>
+  </div>
+  
+
+
+    <!--====================== Services Section ======================-->
+    <section class="container my-5">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <h5>Fast Delivery</h5>
+                    <p>Get your orders delivered in record time with our fast shipping service.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <i class="fa-solid fa-plane"></i>
+                    <h5>Worldwide Shipping</h5>
+                    <p>We deliver to over 150+ countries with reliable courier partners.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <i class="fa-solid fa-handshake"></i>
+                    <h5>Customer Support</h5>
+                    <p>24/7 customer support to assist you with your shopping experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--====================== Category Section ======================-->
+    <section class="container">
+        <h3 class="text-center mb-4">Shop by Category</h3>
+        <div class="row">
+            {% for i in cat %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card category-card">
+                    <a href="{% url 'catpro' i.id %}">
+                        <img class="card-img-top" src="{{ i.image.url }}" alt="{{ i.catname }}">
+                    </a>
+                    <div class="card-body">
+                        <p class="card-text">{{ i.catname }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% include "footer.html" %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Alerts -->
+    {% if sus %}
+    <script>
+        alert('{{ sus }}');
+    </script>
+    {% endif %}
+    {% if store %}
+    <script>
+        alert('{{ store }}');
+    </script>
+    {% endif %}
+    {% if already %}
+    <script>
+        alert('{{ already }}');
+    </script>
+    {% endif %}
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: ecommerce
+    runtime: python
+    envVars:
+      - key: DATABASE_URL
+        value: "sqlite:////var/lib/sqlite/db.sqlite3"  # Persistent storage path
+      - key: SECRET_KEY
+        value: "q50XorVvSm4ZBHkUtccsmwOTBImqXNBrrLOP8LGIo2OFrNauayZ9c5uJ8BJPcJi3fKw"
+      - key: DEBUG
+        value: "False"  # Change to True for local testing
+      - key: ALLOWED_HOSTS
+        value: "ecommerce-ssn1.onrender.com,127.0.0.1,localhost"
+    disk:
+      name: sqlite-data
+      mountPath: /var/lib/sqlite  # Ensures database persistence
+      sizeGB: 1  # Minimum size for persistence
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: |
+      gunicorn project.wsgi:application
+    postDeployCommand: |
+      python manage.py migrate --noinput  # Runs all pending migrations
+      python manage.py collectstatic --noinput  # Collects static files for deployment
+    Session Key: 4M4EpXCYby7dgGlA1HdjXPLShbAxWe1j, Expiry: 2025-03-05 07:06:33.324145, Expired: False

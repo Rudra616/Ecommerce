@@ -1,0 +1,119 @@
+{% extends "nav.html" %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-commerce</title>
+    <link
+      rel="stylesheet"
+      45
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href={% static "CSS/Style.css" %} />
+  </head>
+  <body>
+    <!--====================== Navbar ======================-->
+
+
+    <!--====================== Main Section ======================-->
+    <div class="container my-5">
+      <div class="row mt-4 mr-auto ml-auto">
+        <div class="col-lg-4">
+          <img
+            src={{pro.image.url}}
+            alt="Product Image"
+            class="img-fluid"
+            height="500px"
+            width="300px"
+          />
+
+        </div>
+        <div class="col-lg-6 mr-auto ml-auto mt-5">
+          <h1>{{pro.name}}</h1>
+          <p>
+            {{pro.description}}
+          </p>
+          <p><strong>Price:{{pro.price}}</strong> ₹</p>
+
+          <form  method="post">
+            {% csrf_token %}
+            <label for="">Quantity: </label>
+            <input type="number" name="qty" min="1" required>
+          
+
+          <i class="fa-solid fa-star ratingcolor"></i>
+          <i class="fa-solid fa-star ratingcolor"></i>
+          <i class="fa-solid fa-star ratingcolor"></i>
+          <i class="fa-regular fa-star-half-stroke ratingcolor"></i>
+          <i class="fa-regular fa-star ratingcolor"></i>
+          <br />
+            
+          <button class="btn btn-outline-primary mt-3" type="submit" name='buy'>Buy now</button>
+          <button class="btn btn-outline-primary mt-3" type="submit" name='cart'>Add to cart</button>
+
+
+        </div>
+      </div>
+    </div>
+
+    <!--======================Footer Section======================-->
+    <footer class="bg-dark text-light py-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h5>Contact Us</h5>
+            <p>Email: info@example.com</p>
+            <p>Phone: 123-456-7890</p>
+          </div>
+          <div class="col-md-4">
+            <h5>Links</h5>
+            <ul class="list-unstyled">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Products</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h5>Follow Us</h5>
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col text-center">
+            <p>&copy; 2023 Your E-Commerce Store</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+{% if out %}
+<script>
+    alert('{{out}}')
+</script>
+{% endif %}
+{% endblock content %}

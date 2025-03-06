@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to PayPal...</title>
+</head>
+<body>
+    <h2>Redirecting to PayPal for Payment...</h2>
+    <p>If you are not redirected automatically, <button onclick="document.getElementById('paypal-form').submit();">click here</button>.</p>
+
+    <!-- PayPal Form -->
+    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" id="paypal-form">
+        <input type="hidden" name="cmd" value="_xclick">
+        <input type="hidden" name="business" value="{{ paypal_dict.business }}">
+        <input type="hidden" name="amount" value="{{ paypal_dict.amount }}">
+        <input type="hidden" name="currency_code" value="{{ paypal_dict.currency_code }}">
+        <input type="hidden" name="item_name" value="{{ paypal_dict.item_name }}">
+        <input type="hidden" name="invoice" value="{{ paypal_dict.invoice }}">
+        <input type="hidden" name="notify_url" value="{{ paypal_dict.notify_url }}">
+        <input type="hidden" name="return" value="{{ paypal_dict.return_url }}">
+        <input type="hidden" name="cancel_return" value="{{ paypal_dict.cancel_url }}">
+        <input type="hidden" name="no_shipping" value="1">
+        <input type="hidden" name="no_note" value="1">
+        <input type="submit" value="Pay Now">
+    </form>
+    
+
+    <!-- Auto-submit form after page loads -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById('paypal-form').submit();
+        });
+    </script>
+
+</body>
+</html>
+
+
+{% comment %} 
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body>
+    <style>
+        .w3-container {
+            font-size: 14px;
+        }
+
+        .center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+
+    <div class="center">
+        <h3 class="donate">
+            <div class="w3-card-4">
+
+                <header class="w3-container w3-blue">
+                    <h1>DONATE</h1>
+                </header>
+
+                <div class="w3-container">
+                    <p>Donate for a great cause. Be a hero.</p>
+
+                    <!-- PAYPAL BUTTONS HERE  -->
+
+                    <div id="paypal-button-container"></div>
+
+                    <!-- Include the PayPal JavaScript SDK -->
+                    <script
+                        src="https://www.paypal.com/sdk/js?client-id=AQzXrnbB50wt_cYQyFsAu8fUFGjO-whb6S1h0BvDa5wMWDBaNJlwV_g_Y6GO-LInIIUUSklQgIQHO4et&currency=USD">
+                    </script>
+
+                    <script>
+                        // Render the PayPal button into #paypal-button-container
+                        paypal.Buttons({
+
+                            // Set up the transaction
+                            createOrder: function (data, actions) {
+                                return actions.order.create({
+                                    purchase_units: [{
+                                        amount: {
+                                            value: '50'
+                                        }
+                                    }]
+                                });
+                            },
+
+                            // Finalize the transaction
+                            onApprove: function (data, actions) {
+                                return actions.order.capture().then(function (details) {
+                                    // Show a success message to the buyer
+                                    alert('Transaction completed by ' + details.payer.name
+                                        .given_name + '!');
+                                });
+                            }
+
+
+                        }).render('#paypal-button-container');
+                    </script>
+
+                </div>
+
+                <footer class="w3-container w3-blue">
+                    <h5>&copy Professional Cipher</h5>
+                </footer>
+
+            </div>
+        </h3>
+
+    </div>
+
+</body> {% endcomment %}

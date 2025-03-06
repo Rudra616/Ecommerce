@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navbar with Live Search</title>
+    <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <header class="container-fluid navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <div class="container">
+                <a class="navbar-brand font-weight-bold" href="{% url 'second' %}">
+                    <i class="fa-solid fa-store text-primary"></i> MyShop
+                </a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+    
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'second' %}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#"></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'order_history' %}">Orders</a></li>
+    
+                        {% if session %}
+                        <li class="nav-item">
+                            <a class="nav-link text-danger font-weight-bold" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link text-success font-weight-bold" href="{% url 'login' %}">Login</a>
+                        </li>
+                        {% endif %}
+    
+                        <!-- Products Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button">
+                                <i class="fa-solid fa-box text-dark"></i> Products
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'add_product' %}">Add Product</a>
+                                <a class="dropdown-item" href="{% url 'product_list' %}">Product List</a>
+                            </div>
+                        </li>
+    
+                        <!-- Search Box -->
+                        <li class="nav-item mx-3 d-flex align-items-center position-relative">
+                            <form class="form-inline w-100" action="{% url 'product_search' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input
+                                        class="form-control"
+                                        name="q"
+                                        type="text"
+                                        placeholder="Search products..."
+                                        aria-label="Search"
+                                        required
+                                    />
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-outline-primary">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+    
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cartdata' %}">
+                                <i class="fa fa-shopping-cart text-dark"></i>
+                            </a>
+                        </li>
+    
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profile' %}">
+                                <i class="far fa-user text-dark"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+
+    {% block content %}
+    {% endblock content %}
+
+</body>
+</html>

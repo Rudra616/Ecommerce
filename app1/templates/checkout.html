@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Page</title>
+    <style>
+        .custom-control-label {
+            margin-right: 20px; /* Adjust the value as needed */
+        }
+    </style>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    {% include "nav.html" %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h4 class="mb-3">Checkout details</h4>
+                <form method='POST'>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="1234 Main St" name="addres" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="country">Select a Country:</label>
+                                <select id="country" onchange="showStates()" class="form-control" name='country'>
+                                    <option value="">--Select Country--</option>
+                                    <option value="USA">USA</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="Australia">Australia</option>
+                                    <option value="india">India</option>
+                                </select>
+                        </div>
+                        <div class="col-md-4 mb-3"  id="states" style="display: none;">
+                            <label for="state">Select a State/Province:</label>
+                                <select id="state" class="form-control" name='state'></select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="zip">pin code</label>
+                            <input type="text" class="form-control" id="zip" placeholder="" name='pincode' required>
+                        </div>
+                    </div>
+                    
+                    <hr class="mb-4">
+                    
+                    <h4 class="mb-3">Payment</h4>
+                    
+                    <div class="container mt-2">
+                        <div class="d-block my-3">
+                        
+
+                            <div>
+                               
+                                <label>
+                                    <a >
+                                    <input type="radio"  name="option" value="online" checked required>
+                                    online
+                                    </a>
+                                </label>
+                            </div>
+                        
+                            <div>
+                                <label>
+                                
+
+                                    <input type="radio" name="option" value="cash_on_deilvery" required>
+                                    cash on deilvery
+                                </a>
+
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                   
+
+                    
+                    <hr class="mb-4">
+                    
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                </form>
+            </div>
+
+            <div class="col-md-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <span class="badge badge-secondary badge-pill"></span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <img src="{{product.image.url}}" width="200cm">
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">{{product.name}}</h6>
+                          
+                        </div>
+                      
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">description</h6>
+                            <small class="text-muted">{{product.description}}</small>
+                        </div>
+                        
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">Price:</h6>
+                        </div>
+                        <span class="text-muted">{{product.price}}</span>
+                        <select name="currency">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="INR">INR (₹)</option>
+                        </select>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">Quantity</h6>
+                        </div>
+                        <span class="text-muted">{{Qty}}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total</span>
+                        <strong>{{total}}</strong>
+                    </li>
+                </ul>
+
+                {% comment %} <form class="card p-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Promo code">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-secondary">Redeem</button>
+                        </div>
+                    </div>
+                </form> {% endcomment %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% include "footer.html" %}
+    <script>
+        function showStates() {
+            var country = document.getElementById("country").value;
+            var stateSelect = document.getElementById("state");
+            var statesDiv = document.getElementById("states");
+        
+            // Clear previous states
+            stateSelect.innerHTML = "";
+        
+            if (country === "") {
+                statesDiv.style.display = "none";
+                return;
+            }
+        
+            // Define states for each country
+            var countryStates = {
+                "USA": ["California", "Texas", "New York", "Florida", "Illinois"],
+                "Canada": ["Ontario", "Quebec", "British Columbia", "Alberta", "Manitoba"],
+                "Australia": ["New South Wales", "Victoria", "Queensland", "Western Australia", "South Australia"],
+                "india": ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", 
+                          "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", 
+                          "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", 
+                          "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", 
+                          "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"]
+            };
+        
+            // Populate states based on selected country
+            countryStates[country].forEach(function(state) {
+                var newOption = document.createElement("option");
+                newOption.value = state;
+                newOption.textContent = state;
+                stateSelect.appendChild(newOption);
+            });
+        
+            // Show the states select box
+            statesDiv.style.display = "block";
+        }
+        
+    </script>
+    {% if data %}
+    <script>
+        alert('{{data}}')
+    </script>
+{% endif %}
+ 
+    
+</body>
+</html>
+               

@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none !important;
+  list-style: none;
+}
+i{
+  color: orange;
+}
+.nav-link,
+.navbar-brand {
+  color: black !important;
+}
+li > a {
+  color: #fff;
+}
+.carousel-item img {
+  height: fit-content;
+  width: 100%;
+}
+a:hover {
+  color: #fff;
+}
+a > i {
+  font-size: 20px;
+}
+a > i:hover {
+  color: blue;
+}
+.scale-style {
+  overflow: hidden;
+}
+.img-hover {
+  transition: 0.3s ease-in-out;
+}
+.img-hover:hover {
+  transform: scale(1.1);
+}
+.ratingcolor {
+  color: rgb(255, 164, 28);
+}
+.bg-img{
+  background-image: url(Img/3671942.jpg);
+}

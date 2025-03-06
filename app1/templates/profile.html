@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <!-- External CSS and Bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        .user-profile {
+            background-color: #4caf50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .img-radius {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .btn-grad {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s ease-in-out;
+            width: 100%;
+        }
+
+        .btn-grad:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            cursor: pointer;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .profile-card-wrapper {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 15px;
+        }
+
+        .row {
+            margin-top: 20px;
+        }
+
+        .col-sm-6 p {
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .user-profile {
+                padding: 20px;
+            }
+
+            .img-radius {
+                width: 100px;
+                height: 100px;
+            }
+
+            .btn-grad {
+                width: 100%;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="profile-card-wrapper">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="row no-gutters">
+                        <!-- Profile Image & Name Section -->
+                        <div class="col-md-4 user-profile">
+                            <div class="card-block text-center text-white">
+                                <div class="m-b-25">
+                                    <img src="https://img.icons8.com/bubbles/100/000000/user.png" class="img-radius" alt="User-Profile-Image">
+                                </div>
+                                <h6 class="f-w-600">Name</h6>
+                                <input type="text" name="name" id="name" value="{{ user.name }}" class="form-control">
+                                <a href="profileDetails.html">
+                                    <i class="mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Profile Information Section -->
+                        <div class="col-md-8">
+                            <div class="card-block">
+                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Email</p>
+                                        <input type="email" name="email" value="{{ user.email }}" class="form-control">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Phone</p>
+                                        <input type="number" name="mob" value="{{ user.mob }}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Address</p>
+                                        <textarea name="Add" id="add" rows="4" class="form-control">{{ user.add }}</textarea>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Password</p>
+                                        <input type="password" name="password" value="{{ user.password }}" class="form-control">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn-grad">UPDATE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

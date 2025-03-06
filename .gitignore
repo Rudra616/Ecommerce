@@ -1,0 +1,6 @@
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+app1/__pycache__/
+
+# Ignore static and media files
