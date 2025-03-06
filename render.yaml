@@ -10,7 +10,7 @@ services:
       - key: DEBUG
         value: "False"  # Change to True for local testing
       - key: ALLOWED_HOSTS
-        value: "ecommerce-ssn1.onrender.com,127.0.0.1,localhost"
+        value: "ecommercee-lkck.onrender.com,127.0.0.1,localhost"
     disk:
       name: sqlite-data
       mountPath: /var/lib/sqlite  # Ensures database persistence

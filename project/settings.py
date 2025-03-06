@@ -153,7 +153,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 ALLOWED_HOSTS = [
-    'ecommerce-ssn1.onrender.com',  # Add your Render domain
+    'ecommercee-lkck.onrender.com',  # Add your Render domain
     '127.0.0.1',  # Allow local development
     'localhost'
 ]
@@ -173,7 +173,7 @@ DEBUG = os.getenv("DEBUG", "False").lower() in ["true", "1"]
 
 # CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = [
-    'https://ecommerce-ssn1.onrender.com'  # Add your Render domain for CSRF protection
+    'https://ecommercee-lkck.onrender.com'  # Add your Render domain for CSRF protection
 ]
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
